@@ -1,3 +1,0 @@
-Hi! Files in Home/.desktop show up as icons on the desktop.
-
-Double-click Home in the File Manager to see the rest of the welcome files.
