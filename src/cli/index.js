@@ -39,5 +39,11 @@ module.exports = {
   discover: [
     path.resolve(__dirname, '../packages') // OS.js/src/packages
   ],
+  metadata: {
+    override: {
+      // Settings ships without an icon; scripts/apply-app-icons.js adds one
+      Settings: {icon: 'icon.png'}
+    }
+  },
   tasks: []
 };

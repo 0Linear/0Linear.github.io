@@ -54,10 +54,36 @@ import {DialogServiceProvider} from '@osjs/dialogs';
 import config from './config.js';
 import './index.scss';
 
+// Icons for windows that don't bring their own (dialogs and Settings would
+// otherwise all show the OS.js logo)
+const DIALOG_ICONS = {
+  alert: 'dialog-information',
+  info: 'dialog-information',
+  confirm: 'dialog-question',
+  prompt: 'dialog-question',
+  file: 'folder',
+  color: 'applications-graphics'
+};
+
+const hasOwnIcon = icon => /^data:|\/(apps|icons|themes)\//.test(icon || '');
+
+const fallbackIcon = (core, win) => {
+  if (win.id === 'SettingsMainWindow') {
+    return core.url('apps/Settings/icon.png');
+  }
+
+  const classNames = (win.attributes && win.attributes.classNames) || [];
+  const dialog = Object.keys(DIALOG_ICONS)
+    .find(name => classNames.indexOf(`osjs-${name}-dialog`) !== -1);
+
+  return core.make('osjs/theme').icon(DIALOG_ICONS[dialog] || 'application-x-executable');
+};
+
 const init = () => {
-  // 'mountpoints' is omitted from the defaults so config.js replaces the
-  // list instead of appending to it (the default 'osjs' mount needs a server)
-  const osjs = new Core(config, {omit: ['mountpoints']});
+  // 'mountpoints' and 'panels' are omitted from the defaults so config.js
+  // replaces those lists instead of appending to them (the default 'osjs'
+  // mount needs a server, and a second panel would stack on the first)
+  const osjs = new Core(config, {omit: ['mountpoints', 'panels']});
 
   // Register your service providers
   osjs.register(CoreServiceProvider);
@@ -69,6 +95,12 @@ const init = () => {
   osjs.register(PanelServiceProvider);
   osjs.register(DialogServiceProvider);
   osjs.register(GUIServiceProvider);
+
+  osjs.on('osjs/window:create', win => {
+    if (!hasOwnIcon(win.state.icon)) {
+      win.setIcon(fallbackIcon(osjs, win));
+    }
+  });
 
   osjs.boot();
 };

@@ -62,7 +62,7 @@ module.exports = {
       },
       {
         test: /\.(eot|svg|ttf|woff|woff2)$/,
-        include: /typeface/,
+        include: [/typeface/, path.resolve(__dirname, 'src/client/fonts')],
         use: {
           loader: 'file-loader',
           options: {

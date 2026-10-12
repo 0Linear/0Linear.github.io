@@ -1,0 +1,10 @@
+{
+  "name": "modern-theme",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Modern desktop theme for this OS.js site",
+  "license": "BSD-2-Clause",
+  "osjs": {
+    "type": "package"
+  }
+}

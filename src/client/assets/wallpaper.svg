@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2560" height="1440" viewBox="0 0 2560 1440" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="base" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#141b46"/>
+      <stop offset=".55" stop-color="#1e1650"/>
+      <stop offset="1" stop-color="#0b1230"/>
+    </linearGradient>
+    <radialGradient id="a" cx="18%" cy="22%" r="55%">
+      <stop offset="0" stop-color="#6c63ff" stop-opacity=".85"/>
+      <stop offset="1" stop-color="#6c63ff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="b" cx="85%" cy="18%" r="50%">
+      <stop offset="0" stop-color="#ff6fb1" stop-opacity=".55"/>
+      <stop offset="1" stop-color="#ff6fb1" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="c" cx="72%" cy="88%" r="60%">
+      <stop offset="0" stop-color="#22d3ee" stop-opacity=".6"/>
+      <stop offset="1" stop-color="#22d3ee" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="d" cx="12%" cy="95%" r="45%">
+      <stop offset="0" stop-color="#3b82f6" stop-opacity=".6"/>
+      <stop offset="1" stop-color="#3b82f6" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="w1" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset=".5" stop-color="#ffffff" stop-opacity=".16"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="w2" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#9ad7ff" stop-opacity="0"/>
+      <stop offset=".6" stop-color="#9ad7ff" stop-opacity=".14"/>
+      <stop offset="1" stop-color="#9ad7ff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="2560" height="1440" fill="url(#base)"/>
+  <rect width="2560" height="1440" fill="url(#a)"/>
+  <rect width="2560" height="1440" fill="url(#b)"/>
+  <rect width="2560" height="1440" fill="url(#c)"/>
+  <rect width="2560" height="1440" fill="url(#d)"/>
+  <path d="M-100 980C380 760 760 1120 1260 900S2160 520 2700 720V1540H-100Z" fill="#ffffff" fill-opacity=".035"/>
+  <path d="M-100 1120C460 940 900 1240 1420 1060S2240 820 2700 980V1540H-100Z" fill="#ffffff" fill-opacity=".04"/>
+  <path d="M-100 860C420 640 820 1000 1300 800S2180 420 2700 600" fill="none" stroke="url(#w1)" stroke-width="3"/>
+  <path d="M-100 930C460 720 860 1080 1340 870S2200 520 2700 690" fill="none" stroke="url(#w2)" stroke-width="2"/>
+  <path d="M-100 1010C500 800 900 1150 1380 950S2220 610 2700 770" fill="none" stroke="url(#w1)" stroke-width="1.5"/>
+</svg>

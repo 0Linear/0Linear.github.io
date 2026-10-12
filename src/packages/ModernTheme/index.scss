@@ -1,0 +1,1031 @@
+/*
+ * Modern Theme for OS.js
+ *
+ * A light desktop look: floating glass taskbar, rounded windows with soft
+ * shadows, rounded controls and frosted menus.
+ */
+
+// Palette
+$accent: #3d7bfd;
+$accent-soft: rgba(61, 123, 253, 0.12);
+$ring: 0 0 0 3px rgba(61, 123, 253, 0.28);
+$text: #1d2230;
+$muted: #687083;
+$surface: #fff;
+$surface-alt: #f6f7f9;
+$line: #e4e7ed;
+$field-line: #d5dae3;
+$radius: 12px;
+$radius-sm: 8px;
+$ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+@mixin glass($bg) {
+  background: $bg;
+  backdrop-filter: blur(22px) saturate(170%);
+  -webkit-backdrop-filter: blur(22px) saturate(170%);
+}
+
+@mixin focus-ring {
+  outline: 0 none;
+  border-color: $accent;
+  box-shadow: $ring;
+}
+
+@keyframes modern-window-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes modern-pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/*
+ * Base
+ */
+.osjs-root {
+  color: $text;
+  font-size: 13px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.osjs-root ::selection {
+  background: rgba(61, 123, 253, 0.25);
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  border: 3px solid transparent;
+  border-radius: 12px;
+  background: rgba(30, 36, 52, 0.25) padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(30, 36, 52, 0.42) padding-box;
+}
+
+::-webkit-scrollbar-button {
+  display: none;
+}
+
+/*
+ * Taskbar
+ */
+.osjs-panel {
+  padding: 6px 10px 8px;
+  background: transparent;
+  box-shadow: none;
+  color: #fff;
+  min-height: 58px;
+  gap: 4px;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 6px;
+    right: 10px;
+    bottom: 8px;
+    left: 10px;
+    z-index: -1;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 16px;
+    box-shadow: 0 12px 32px -8px rgba(5, 8, 25, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+
+    @include glass(rgba(22, 24, 40, 0.58));
+  }
+
+  &[data-position=top] {
+    padding: 8px 10px 6px;
+
+    &::before {
+      top: 8px;
+      bottom: 6px;
+    }
+  }
+
+  > .osjs-panel-item {
+    padding: 0 4px;
+  }
+
+  .osjs-panel-item--clickable {
+    border-radius: 10px;
+    transition: background-color 0.15s ease, transform 0.15s ease;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.12);
+      color: #fff;
+      box-shadow: none;
+    }
+
+    &:active {
+      background-color: rgba(255, 255, 255, 0.08);
+      transform: scale(0.97);
+    }
+  }
+
+  .osjs-panel-item--icon > img {
+    height: 18px;
+    width: 18px;
+    margin-right: 8px;
+  }
+}
+
+// Start button
+.osjs-panel-item[data-name=menu] {
+  padding-left: 6px !important;
+
+  > div {
+    padding: 8px 10px;
+
+    > img {
+      height: 22px !important;
+      width: 22px !important;
+      margin-right: 0 !important;
+    }
+
+    > span {
+      display: none;
+    }
+  }
+}
+
+// Running windows
+.osjs-panel-item[data-name=windows] {
+  gap: 4px;
+
+  > div {
+    position: relative;
+    padding: 8px 12px;
+    max-width: 220px;
+    color: rgba(255, 255, 255, 0.75);
+    transition: background-color 0.15s ease, color 0.15s ease;
+
+    &::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: 3px;
+      width: 6px;
+      height: 3px;
+      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.55);
+      transform: translateX(-50%);
+      transition: width 0.2s $ease, background-color 0.2s ease;
+    }
+
+    &[data-focused=true] {
+      background: rgba(255, 255, 255, 0.14);
+      color: #fff;
+
+      &::after {
+        width: 18px;
+        background: #7fb0ff;
+      }
+    }
+
+    &[data-focused=false] > * {
+      opacity: 1;
+    }
+  }
+}
+
+// Tray & clock
+.osjs-panel-item[data-name=tray] > div {
+  padding: 8px;
+
+  > img {
+    width: 18px;
+    height: 18px;
+    filter: invert(1) brightness(1.2);
+  }
+}
+
+.osjs-panel-item[data-name=clock] {
+  padding: 0 12px 0 8px !important;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+/*
+ * Windows
+ */
+.osjs-window {
+  border: 0;
+  border-radius: $radius;
+  background: $surface;
+  box-shadow:
+    0 0 0 1px rgba(14, 20, 40, 0.1),
+    0 28px 60px -20px rgba(8, 12, 35, 0.55),
+    0 10px 24px -10px rgba(8, 12, 35, 0.3);
+  animation: modern-window-in 0.2s $ease;
+
+  &:not([data-moving=true]):not([data-resizing=true]) {
+    transition:
+      opacity 0.18s ease,
+      visibility 0.18s,
+      transform 0.18s $ease,
+      box-shadow 0.2s ease,
+      top 0.18s $ease,
+      left 0.18s $ease,
+      width 0.18s $ease,
+      height 0.18s $ease;
+  }
+
+  &[data-focused=false] {
+    box-shadow:
+      0 0 0 1px rgba(14, 20, 40, 0.1),
+      0 14px 34px -16px rgba(8, 12, 35, 0.4);
+
+    .osjs-window-title {
+      color: $muted;
+    }
+
+    .osjs-window-icon {
+      opacity: 0.6;
+    }
+  }
+
+  &[data-minimized=true] {
+    display: block;
+    opacity: 0;
+    transform: translateY(24px) scale(0.94);
+    pointer-events: none;
+  }
+
+  &[data-minimized=false] {
+    display: block;
+  }
+
+  &[data-maximized=true] {
+    border-radius: 0;
+
+    .osjs-window-inner {
+      border-radius: 0;
+    }
+  }
+
+  &[data-loading=true] {
+    pointer-events: none;
+
+    &::after {
+      border-radius: $radius;
+      background: rgba(255, 255, 255, 0.55);
+    }
+  }
+
+  &.osjs__drop {
+    outline: 2px dashed $accent;
+    outline-offset: 3px;
+  }
+}
+
+.osjs-window-inner {
+  border-radius: $radius;
+  overflow: hidden;
+}
+
+.osjs-window-header {
+  align-items: center;
+  min-height: 42px;
+  padding: 0 8px 0 14px;
+  background: $surface-alt;
+  border-bottom: 1px solid $line;
+
+  > div {
+    height: auto;
+  }
+
+  > .osjs-window-button {
+    height: 26px;
+  }
+}
+
+.osjs-window-icon {
+  margin-right: 10px;
+
+  > div {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.osjs-window-title {
+  font-weight: 600;
+  font-size: 13px;
+  text-align: center;
+  color: $text;
+  padding-right: 8px;
+}
+
+.osjs-window-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 26px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(20, 26, 45, 0.06);
+  transition: background-color 0.15s ease;
+
+  &:not(:last-child) {
+    margin-right: 6px;
+  }
+
+  > div {
+    position: relative;
+    width: 10px;
+    height: 10px;
+
+    &::before,
+    &::after {
+      content: "";
+      position: absolute;
+      box-sizing: border-box;
+      background: #3a4255;
+    }
+  }
+
+  &:hover {
+    background: rgba(20, 26, 45, 0.12);
+  }
+
+  &:active {
+    background: rgba(20, 26, 45, 0.18);
+  }
+
+  &[data-action=minimize] > div::before {
+    left: 0;
+    right: 0;
+    bottom: 1px;
+    height: 2px;
+    border-radius: 1px;
+  }
+
+  &[data-action=minimize] > div::after {
+    display: none;
+  }
+
+  &[data-action=maximize] > div::before {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 2px solid #3a4255;
+    border-radius: 2.5px;
+    background: transparent;
+  }
+
+  &[data-action=maximize] > div::after {
+    display: none;
+  }
+
+  &[data-action=close] > div::before,
+  &[data-action=close] > div::after {
+    top: 50%;
+    left: -1px;
+    right: -1px;
+    height: 2px;
+    margin-top: -1px;
+    border-radius: 1px;
+    transform: rotate(45deg);
+  }
+
+  &[data-action=close] > div::after {
+    transform: rotate(-45deg);
+  }
+
+  &[data-action=close]:hover {
+    background: #ef4444;
+
+    > div::before,
+    > div::after {
+      background: #fff;
+    }
+  }
+}
+
+.osjs-window-content {
+  background: $surface;
+}
+
+.osjs-window-resize {
+  min-width: 10px;
+  min-height: 10px;
+}
+
+/*
+ * GUI: menubar, toolbar, statusbar
+ */
+.osjs-gui-menubar {
+  padding: 4px 6px;
+  background: $surface;
+  border-bottom: 1px solid $line;
+  gap: 2px;
+
+  > div {
+    border-radius: 6px;
+    color: $text;
+    transition: background-color 0.12s ease;
+
+    > span {
+      margin: 5px 10px;
+    }
+
+    &:hover {
+      background-color: $accent-soft;
+      color: $accent;
+    }
+  }
+}
+
+.osjs-gui-toolbar {
+  align-items: center;
+
+  &.osjs-gui-vertical > .osjs-gui:not(:last-child) {
+    margin-right: 6px;
+  }
+}
+
+.osjs-gui-box > .osjs-gui-statusbar {
+  margin: 0;
+}
+
+.osjs-gui-statusbar {
+  align-items: center;
+  min-height: 30px;
+  padding: 0 12px;
+  background: $surface-alt;
+  border-top: 1px solid $line;
+  color: $muted;
+  font-size: 12px;
+}
+
+/*
+ * GUI: buttons and fields
+ */
+.osjs-gui-button > button {
+  min-height: 30px;
+  padding: 5px 12px;
+  border: 1px solid $field-line;
+  border-radius: $radius-sm;
+  background: $surface;
+  color: $text;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.06);
+  transition: background-color 0.12s ease, border-color 0.12s ease, box-shadow 0.12s ease;
+
+  &:hover:not(:disabled) {
+    background: $surface-alt;
+    border-color: #c6ccd7;
+  }
+
+  &:active:not(:disabled),
+  &[active=true] {
+    background: #eceff4;
+    box-shadow: inset 0 1px 2px rgba(16, 24, 40, 0.08);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: default;
+  }
+
+  .osjs-icon {
+    width: 16px;
+    height: 16px;
+    min-width: 16px;
+    min-height: 16px;
+  }
+}
+
+.osjs-gui-field,
+.osjs-gui-input {
+  input,
+  select,
+  textarea {
+    padding: 6px 10px;
+    border: 1px solid $field-line;
+    border-radius: $radius-sm;
+    background: $surface;
+    color: $text;
+    font-family: inherit;
+    font-size: inherit;
+    transition: border-color 0.12s ease, box-shadow 0.12s ease;
+
+    &:focus {
+      @include focus-ring;
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      background: $surface-alt;
+    }
+  }
+
+  select {
+    padding-right: 28px;
+  }
+}
+
+.osjs-gui-select-field > div::after {
+  content: "";
+  width: 7px;
+  height: 7px;
+  right: 12px;
+  border: solid $muted;
+  border-width: 0 2px 2px 0;
+  transform: translateY(-70%) rotate(45deg);
+  pointer-events: none;
+}
+
+// Checkboxes and radios
+.osjs-gui-toggle-field > label {
+  align-items: center;
+
+  > span.osjs-toggle-input {
+    width: 18px;
+    height: 18px;
+
+    &::before {
+      width: 18px;
+      height: 18px;
+      border: 1.5px solid #b9c0cc;
+      border-radius: 5px;
+      background: $surface;
+      transition: background-color 0.12s ease, border-color 0.12s ease;
+    }
+
+    &::after {
+      content: "";
+      top: 45%;
+      width: 5px;
+      height: 9px;
+      border: solid #fff;
+      border-width: 0 2px 2px 0;
+      transform: translate(-50%, -50%) rotate(45deg);
+      font-size: inherit;
+    }
+  }
+
+  > input:checked + span.osjs-toggle-input::before {
+    border-color: $accent;
+    background: $accent;
+  }
+
+  > input[type=radio] + span.osjs-toggle-input::before {
+    border-radius: 50%;
+  }
+
+  > input[type=radio] + span.osjs-toggle-input::after {
+    top: 50%;
+    width: 8px;
+    height: 8px;
+    border: 0;
+    border-radius: 50%;
+    background: #fff;
+    transform: translate(-50%, -50%);
+  }
+}
+
+// Sliders
+.osjs-gui-range-field > input[type=range] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 24px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+
+  &::-webkit-slider-runnable-track {
+    height: 4px;
+    border-radius: 4px;
+    background: #dde2ea;
+    cursor: pointer;
+  }
+
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    margin-top: -6px;
+    border: 0;
+    border-radius: 50%;
+    background: $accent;
+    box-shadow: 0 0 0 3px #fff, 0 1px 4px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+  }
+
+  &::-moz-range-track {
+    height: 4px;
+    border-radius: 4px;
+    background: #dde2ea;
+  }
+
+  &::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border: 0;
+    border-radius: 50%;
+    background: $accent;
+    box-shadow: 0 0 0 3px #fff, 0 1px 4px rgba(0, 0, 0, 0.3);
+  }
+}
+
+// Progress bars
+.osjs-gui-progressbar-wrapper {
+  overflow: hidden;
+  border: 0;
+  border-radius: 999px;
+  background: #e6e9ef;
+  color: $text;
+}
+
+.osjs-gui-progressbar-value {
+  border-radius: 999px;
+  background: linear-gradient(90deg, #6aa3ff, $accent);
+}
+
+/*
+ * GUI: tabs, panes, boxes
+ */
+.osjs-gui-tabs-header {
+  gap: 4px;
+  border-bottom: 1px solid $line;
+
+  > div {
+    padding: 8px 14px;
+    border: 0;
+    border-radius: 8px 8px 0 0;
+    background: transparent;
+    color: $muted;
+    font-weight: 500;
+
+    &:hover {
+      color: $text;
+    }
+
+    &.osjs__active {
+      color: $accent;
+      box-shadow: inset 0 -2px 0 $accent;
+    }
+  }
+}
+
+.osjs-gui-tabs-panes {
+  margin-top: 0;
+
+  > div {
+    border: 0;
+    background: transparent;
+    padding: 12px 4px;
+  }
+}
+
+.osjs-gui-panes-pane {
+  margin: 8px;
+}
+
+.osjs-gui-panes-inner.osjs-gui-vertical > .osjs-gui-panes-spacer {
+  width: 2px;
+  min-width: 2px;
+  margin: 8px 0;
+  border-radius: 2px;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background: $accent-soft;
+  }
+}
+
+.osjs-gui-box-styled {
+  border: 1px solid $line;
+  border-radius: 10px;
+  background: $surface;
+  color: $text;
+}
+
+.osjs-gui-expander-header {
+  border: 0;
+  border-radius: $radius-sm;
+  background: $surface-alt;
+  font-weight: 600;
+}
+
+/*
+ * GUI: list and icon views
+ */
+.osjs-gui-list-view-wrapper {
+  border: 1px solid $line;
+  border-radius: 10px;
+  background: $surface;
+  color: $text;
+
+  &:focus {
+    outline: 0 none;
+    border-color: #bcd1fb;
+  }
+}
+
+.osjs-gui-list-view-header {
+  box-sizing: border-box;
+  height: 34px;
+  align-items: center;
+  padding: 0 12px;
+  background: $surface-alt;
+  border-bottom: 1px solid $line;
+  color: $muted;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.osjs-gui-list-view-cell {
+  box-sizing: border-box;
+  height: 32px;
+  padding: 0 12px;
+  align-items: center;
+}
+
+.osjs-gui-list-view .osjs-icon {
+  width: 18px;
+  height: 18px;
+  margin-right: 10px;
+}
+
+.osjs-gui-list-view .rows:not([data-zebra=false]) > div:nth-child(odd):not(.osjs__active) {
+  background-color: #fafbfc;
+}
+
+.osjs-gui-list-view .rows > div:hover:not(.osjs__active) {
+  background-color: #f1f5ff !important;
+}
+
+.osjs-gui-list-view .osjs__active {
+  background: $accent;
+  color: #fff;
+}
+
+.osjs-gui-icon-view-wrapper {
+  border: 1px solid $line;
+  border-radius: 10px;
+  background: $surface;
+  color: $text;
+
+  .osjs__image,
+  .osjs__label {
+    border-radius: 8px;
+  }
+
+  .osjs__active .osjs__image {
+    background: $accent-soft;
+  }
+
+  .osjs__active .osjs__label {
+    background: $accent;
+    color: #fff;
+  }
+}
+
+/*
+ * Menus (context menu, application menu, menubar dropdowns)
+ */
+.osjs-gui-menu {
+  ul {
+    min-width: 200px;
+    padding: 6px;
+    border: 1px solid rgba(20, 26, 45, 0.1);
+    border-radius: 12px;
+    color: $text;
+    box-shadow: 0 22px 48px -16px rgba(8, 12, 35, 0.45), 0 4px 12px -4px rgba(8, 12, 35, 0.15);
+    animation: modern-pop-in 0.14s $ease;
+
+    @include glass(rgba(255, 255, 255, 0.88));
+  }
+
+  ul > li > div > ul {
+    top: -7px;
+  }
+
+  li > div > span {
+    border-radius: 7px;
+  }
+
+  li:hover > div > span {
+    background-color: $accent;
+    color: #fff;
+  }
+
+  .osjs__disabled {
+    opacity: 0.4;
+  }
+}
+
+.osjs-gui-menu-label {
+  padding: 7px 30px 7px 10px;
+  min-height: 18px;
+
+  > .osjs-icon {
+    width: 18px;
+    height: 18px;
+    margin-right: 10px;
+  }
+}
+
+.osjs-gui-menu-container[data-has-children] > .osjs-gui-menu-label::after {
+  content: "";
+  right: 12px;
+  width: 6px;
+  height: 6px;
+  border: solid currentColor;
+  border-width: 0 1.5px 1.5px 0;
+  opacity: 0.6;
+  transform: translateY(-50%) rotate(-45deg);
+}
+
+.osjs-gui-menu-separator {
+  padding: 4px 8px;
+
+  &::after {
+    background: rgba(20, 26, 45, 0.1);
+  }
+}
+
+/*
+ * Desktop icons
+ */
+.osjs-desktop-iconview__wrapper {
+  top: 16px;
+  left: 16px;
+}
+
+.osjs-desktop-iconview__entry {
+  width: 84px;
+  height: 96px;
+  margin: 4px;
+  border-radius: 12px;
+  transition: background-color 0.12s ease;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+.osjs-desktop-iconview__entry__icon {
+  height: 64px;
+  padding: 8px 14px 4px;
+}
+
+.osjs-desktop-iconview__entry__icon__icon {
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.25));
+}
+
+.osjs-desktop-iconview__entry__label {
+  height: auto;
+  max-height: 2.6em;
+  padding: 2px 4px;
+  font-size: 12px;
+  line-height: 1.3;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.65);
+  word-break: break-word;
+}
+
+.osjs-desktop-iconview__entry--selected {
+  background-color: rgba(255, 255, 255, 0.18);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.28);
+
+  .osjs-desktop-iconview__entry__icon {
+    background: transparent;
+  }
+
+  .osjs-desktop-iconview__entry__label {
+    max-height: none;
+    padding: 2px 4px;
+    border-radius: 6px;
+    background: $accent;
+    text-shadow: none;
+  }
+}
+
+/*
+ * Notifications
+ */
+.osjs-notifications {
+  padding: 16px;
+}
+
+.osjs-notification {
+  min-width: 260px;
+  max-width: 360px;
+  padding: 14px 16px;
+  border: 1px solid rgba(20, 26, 45, 0.08);
+  border-radius: 14px;
+  color: $text;
+  box-shadow: 0 18px 40px -16px rgba(8, 12, 35, 0.5);
+  animation: modern-pop-in 0.2s $ease;
+  cursor: pointer;
+
+  @include glass(rgba(255, 255, 255, 0.9));
+
+  .osjs-notification-title {
+    font-weight: 600;
+  }
+
+  .osjs-notification-message {
+    margin-top: 4px;
+    color: $muted;
+    line-height: 1.4;
+  }
+}
+
+.osjs-notification-wrapper {
+  background-size: 32px;
+  background-position: 0 50%;
+
+  &[data-has-icon=true] {
+    padding-left: 46px;
+  }
+}
+
+/*
+ * Search (F3)
+ */
+.osjs-search-container {
+  overflow: hidden;
+  width: min(640px, 90vw);
+  border: 1px solid rgba(20, 26, 45, 0.1);
+  border-radius: 16px;
+  box-shadow: 0 30px 70px -20px rgba(8, 12, 35, 0.6);
+  animation: modern-pop-in 0.16s $ease;
+
+  @include glass(rgba(255, 255, 255, 0.9));
+}
+
+.osjs-search-input {
+  padding: 16px 20px;
+  border: 0;
+  border-bottom: 1px solid $line;
+  background: transparent;
+  color: $text;
+  font-family: inherit;
+  font-size: 16px;
+  outline: 0 none;
+}
+
+.osjs-search-message {
+  color: $muted;
+}
+
+.osjs-search-result {
+  margin: 4px 8px;
+  padding: 8px 10px;
+  border-radius: 8px;
+
+  &.osjs__active,
+  &:hover {
+    background-color: $accent;
+    color: #fff;
+  }
+}
+
+/*
+ * Phones and small screens
+ */
+.osjs-root[data-mobile=true] .osjs-window {
+  border-radius: 0;
+
+  .osjs-window-inner {
+    border-radius: 0;
+  }
+}
