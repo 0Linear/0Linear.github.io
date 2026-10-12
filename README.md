@@ -56,8 +56,9 @@ their browser. An empty folder needs a `.gitkeep` file inside it so Git keeps it
   drawn there falls back to Gnome Icons. After editing the artwork, run
   `npm run build:icons` (needs Playwright + Chromium) and commit the PNGs.
 - `Textpad`: replaces the stock Textpad and adds zoom (View menu, Ctrl +/-/0,
-  Ctrl + mouse wheel, pinch, or the -/+ buttons in the status bar), word wrap
-  and Ctrl+S.
+  Ctrl + mouse wheel, pinch, or the -/+ buttons in the status bar), find &
+  replace (Ctrl+Shift+F: match case, whole word, regex with `$1`/`$<name>`,
+  replace one or all, undoable with Ctrl+Z), word wrap and Ctrl+S.
 
 Wallpaper, font (Inter) and taskbar layout are set in `src/client/config.js`.
 Visitors can still switch theme and icons in *Settings*.
