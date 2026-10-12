@@ -1,0 +1,11 @@
+Welcome!
+
+This desktop runs entirely in your browser. There is no server:
+anything you create or change here is saved in this browser only.
+
+Try this:
+  - Open Documents/Notes.md in Textpad, edit it, and save.
+  - Open Pictures/Sunset.png in Preview, or draw on it in Draw.
+  - Right-click the desktop to change the wallpaper.
+
+Your changes stay until you clear this site's data in your browser.
