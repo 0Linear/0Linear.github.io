@@ -1,0 +1,13 @@
+{
+  "type": "icons",
+  "name": "ModernIcons",
+  "title": {
+    "en_EN": "Modern Icons"
+  },
+  "description": {
+    "en_EN": "Colorful modern icons (falls back to Gnome Icons)"
+  },
+  "files": [
+    "main.css"
+  ]
+}

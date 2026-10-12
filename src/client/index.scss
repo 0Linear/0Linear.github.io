@@ -40,8 +40,40 @@
 @import "~@osjs/dialogs/dist/main.css";
 @import "~@osjs/panels/dist/main.css";
 
+@each $weight in 400, 500, 600, 700 {
+  @font-face {
+    font-family: Inter;
+    font-style: normal;
+    font-weight: $weight;
+    font-display: swap;
+    src: url("./fonts/inter-latin-#{$weight}-normal.woff2") format("woff2");
+  }
+}
+
 body,
 html {
   width: 100%;
   height: 100%;
+  margin: 0;
+  background: #141b46;
+}
+
+// Shown before the theme loads, so it matches the wallpaper
+.osjs-root {
+  background-color: #141b46;
+  background-image: url("./assets/wallpaper.svg");
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+.osjs-boot-splash {
+  padding: 14px 22px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 14px;
+  background: rgba(22, 24, 40, 0.55);
+  backdrop-filter: blur(20px);
+  color: rgba(255, 255, 255, 0.92);
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  box-shadow: 0 20px 50px -20px rgba(0, 0, 0, 0.6);
 }

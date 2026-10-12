@@ -1,0 +1,10 @@
+{
+  "name": "textpad-zoom",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Textpad with zoom, based on @osjs/textpad-application",
+  "license": "BSD-2-Clause",
+  "osjs": {
+    "type": "package"
+  }
+}

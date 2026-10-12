@@ -38,6 +38,8 @@
 //
 
 import browserAdapter from './browser-vfs.js';
+import wallpaper from './assets/wallpaper.svg';
+import startIcon from './assets/start.svg';
 
 export default {
   // No Node server: login and settings use the browser's localStorage
@@ -49,6 +51,33 @@ export default {
 
   ws: {
     disabled: true
+  },
+
+  // Look & feel. Visitors can still change these in Settings.
+  desktop: {
+    settings: {
+      font: 'Inter',
+      theme: 'ModernTheme',
+      icons: 'ModernIcons',
+      // Replaces the default list (see `omit` in index.js)
+      panels: [{
+        position: 'bottom',
+        items: [
+          {name: 'menu', options: {icon: startIcon}},
+          {name: 'windows'},
+          {name: 'tray'},
+          {name: 'clock'}
+        ]
+      }],
+      notifications: {
+        position: 'top-right'
+      },
+      background: {
+        src: wallpaper,
+        color: '#141b46',
+        style: 'cover'
+      }
+    }
   },
 
   auth: {

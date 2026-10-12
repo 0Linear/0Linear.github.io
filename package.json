@@ -19,7 +19,9 @@
     "make:provider": "osjs-cli make:provider",
     "build": "webpack",
     "build:welcome": "node scripts/build-welcome.js",
-    "build:pages": "osjs-cli package:discover --copy && webpack && node scripts/build-welcome.js",
+    "build:packages": "webpack --config src/packages/webpack.config.js && node src/packages/ModernIcons/build.js",
+    "build:icons": "node scripts/render-icons.js",
+    "build:pages": "npm run build:packages && osjs-cli package:discover --copy && webpack && node scripts/apply-app-icons.js && node scripts/build-welcome.js",
     "watch": "webpack --watch"
   },
   "keywords": [

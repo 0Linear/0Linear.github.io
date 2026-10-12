@@ -48,6 +48,20 @@ welcome files, copies a visitor hasn't touched are updated, new files appear, an
 files you removed disappear. To start fresh, a visitor clears the site's data in
 their browser. An empty folder needs a `.gitkeep` file inside it so Git keeps it.
 
+**Look & feel:** the site ships its own packages in `src/packages/`, built by
+`npm run build:packages` (part of `build:pages`):
+
+- `ModernTheme`: glass taskbar, rounded windows, modern controls and menus.
+- `ModernIcons`: colorful icons drawn in `ModernIcons/design.js`; anything not
+  drawn there falls back to Gnome Icons. After editing the artwork, run
+  `npm run build:icons` (needs Playwright + Chromium) and commit the PNGs.
+- `Textpad`: replaces the stock Textpad and adds zoom (View menu, Ctrl +/-/0,
+  Ctrl + mouse wheel, pinch, or the -/+ buttons in the status bar), word wrap
+  and Ctrl+S.
+
+Wallpaper, font (Inter) and taskbar layout are set in `src/client/config.js`.
+Visitors can still switch theme and icons in *Settings*.
+
 **Build locally:**
 
 ```

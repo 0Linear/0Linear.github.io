@@ -1,0 +1,14 @@
+{
+  "type": "theme",
+  "name": "ModernTheme",
+  "title": {
+    "en_EN": "Modern Theme"
+  },
+  "description": {
+    "en_EN": "Rounded windows, glass taskbar and soft shadows"
+  },
+  "files": [
+    "main.js",
+    "main.css"
+  ]
+}
