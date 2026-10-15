@@ -46,7 +46,10 @@ export default {
   standalone: true,
 
   http: {
-    ping: false
+    ping: false,
+    // Folder the desktop is served from ("/desktop/" on the site, "/" locally),
+    // so apps, themes and welcome files load from the right place
+    public: window.location.pathname.replace(/[^/]*$/, '')
   },
 
   ws: {
