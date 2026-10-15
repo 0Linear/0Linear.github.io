@@ -81,6 +81,21 @@ $line: #d5dae3;
   }
 }
 
+// Selected word: other occurrences (blue) and similar words (purple)
+.textpad-same {
+  border-radius: 2px;
+  background: rgba(61, 123, 253, 0.2);
+  box-shadow: inset 0 -2px 0 rgba(61, 123, 253, 0.65);
+  color: transparent;
+}
+
+.textpad-similar {
+  border-radius: 2px;
+  background: rgba(168, 85, 247, 0.13);
+  box-shadow: inset 0 -2px 0 rgba(168, 85, 247, 0.5);
+  color: transparent;
+}
+
 // Find & replace panel
 @keyframes textpad-find-in {
   from {
@@ -263,6 +278,65 @@ $line: #d5dae3;
   gap: 16px;
   margin: 0;
   padding-right: 6px;
+}
+
+.textpad-words {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.textpad-words-same {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #1d2230;
+  font-weight: 600;
+}
+
+.textpad-words-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: 6px;
+}
+
+.textpad-swatch {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 3px;
+
+  &.is-same {
+    background: rgba(61, 123, 253, 0.35);
+    box-shadow: inset 0 -2px 0 rgba(61, 123, 253, 0.8);
+  }
+
+  &.is-similar {
+    background: rgba(168, 85, 247, 0.25);
+    box-shadow: inset 0 -2px 0 rgba(168, 85, 247, 0.75);
+  }
+}
+
+.textpad-word {
+  flex: 0 0 auto;
+  height: 20px;
+  padding: 0 7px;
+  border: 0;
+  border-radius: 6px;
+  background: rgba(168, 85, 247, 0.1);
+  color: #6b32b5;
+  font: inherit;
+  font-size: 11.5px;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(168, 85, 247, 0.2);
+  }
 }
 
 .textpad-zoom {
