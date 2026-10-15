@@ -63,6 +63,14 @@ their browser. An empty folder needs a `.gitkeep` file inside it so Git keeps it
 Wallpaper, font (Inter) and taskbar layout are set in `src/client/config.js`.
 Visitors can still switch theme and icons in *Settings*.
 
+**Offline cache:** `npm run build:pages` also writes `dist/sw.js` (from
+`src/client/service-worker.js` via `scripts/build-sw.js`). On the first visit
+the browser stores the files the desktop needs; after that a visit makes one
+small request (the check for a new version), and the desktop works offline.
+Welcome files are stored the first time each is opened. After a deploy,
+browsers download only the files that changed, and the desktop shows a
+"reload" notice.
+
 **Build locally:**
 
 ```
