@@ -22,6 +22,27 @@
 
 ## Running on GitHub Pages (this copy)
 
+**Site layout:** the site root shows a presentation; the desktop lives under `/desktop/`.
+
+| Address | What it is | Source |
+| --- | --- | --- |
+| `/` | PowerPoint-style viewer for the deck | `presentation/` |
+| `/desktop/` | The OS.js desktop | everything else |
+
+The branch `desktop-backup` keeps the site as it was before the presentation was added.
+
+**Changing the presentation:** put the new `.pptx` in `presentation/source/`, run
+`npm run build:slides -- "presentation/source/<name>.pptx"` and commit the updated
+`presentation/slides/`, `presentation/thumbs/` and `presentation/slides.json`.
+This needs LibreOffice, Poppler (`pdftoppm`), and Python with Pillow and
+python-pptx; install the deck's fonts first so the slides look like they do in
+PowerPoint. The `.pptx` itself is not published on the site.
+
+In the viewer: **Present** (or F5) starts the slide show; arrows, Space, click or
+swipe move between slides; G shows all slides; B / W blank the screen; L is a
+laser pointer; type a number and Enter to jump; Esc ends the show. Press ? for
+the full list. The address keeps the current slide (`/#4`), so links open on it.
+
 This copy is set up to run with **no server**, so it can be hosted on GitHub Pages
 (or any static host).
 
