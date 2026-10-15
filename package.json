@@ -21,7 +21,7 @@
     "build:welcome": "node scripts/build-welcome.js",
     "build:packages": "webpack --config src/packages/webpack.config.js && node src/packages/ModernIcons/build.js",
     "build:icons": "node scripts/render-icons.js",
-    "build:pages": "npm run build:packages && osjs-cli package:discover --copy && webpack && node scripts/apply-app-icons.js && node scripts/build-welcome.js",
+    "build:pages": "npm run build:packages && osjs-cli package:discover --copy && webpack && node scripts/apply-app-icons.js && node scripts/build-welcome.js && node scripts/build-sw.js",
     "watch": "webpack --watch"
   },
   "keywords": [

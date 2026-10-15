@@ -103,6 +103,24 @@ const init = () => {
   });
 
   osjs.boot();
+
+  // Keep the site's files in the browser (see service-worker.js)
+  if ('serviceWorker' in navigator && window.isSecureContext) {
+    const hadController = !!navigator.serviceWorker.controller;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (hadController) {
+        osjs.make('osjs/notification', {
+          title: 'Desktop updated',
+          message: 'A new version was downloaded. Reload the page to use it.'
+        });
+      }
+    });
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js').catch(error => {
+        console.warn('Offline cache unavailable:', error);
+      });
+    });
+  }
 };
 
 window.addEventListener('DOMContentLoaded', () => init());
