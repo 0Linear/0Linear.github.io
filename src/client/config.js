@@ -40,6 +40,7 @@
 import browserAdapter from './browser-vfs.js';
 import wallpaper from './assets/wallpaper.svg';
 import startIcon from './assets/start.svg';
+import cyberchefIcon from './assets/cyberchef.svg';
 
 export default {
   // No Node server: login and settings use the browser's localStorage
@@ -52,6 +53,14 @@ export default {
   ws: {
     disabled: true
   },
+
+  // Web links shown as desktop icons; they open in a new tab
+  // (see desktop-links.js). `icon` is optional.
+  desktopLinks: [{
+    title: 'CyberChef',
+    url: 'https://gchq.github.io/CyberChef/',
+    icon: cyberchefIcon
+  }],
 
   // Look & feel. Visitors can still change these in Settings.
   desktop: {
