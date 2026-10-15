@@ -65,6 +65,9 @@ const DIALOG_ICONS = {
   color: 'applications-graphics'
 };
 
+// Main windows of the File Manager and Textpad
+const MAXIMIZED_WINDOWS = ['FileManager', 'TextpadWindow'];
+
 const hasOwnIcon = icon => /^data:|\/(apps|icons|themes)\//.test(icon || '');
 
 const fallbackIcon = (core, win) => {
@@ -95,6 +98,13 @@ const init = () => {
   osjs.register(PanelServiceProvider);
   osjs.register(DialogServiceProvider);
   osjs.register(GUIServiceProvider);
+
+  // These apps open maximized (the restore button still makes them smaller)
+  osjs.on('osjs/window:render', win => {
+    if (MAXIMIZED_WINDOWS.indexOf(win.id) !== -1) {
+      win.maximize();
+    }
+  });
 
   osjs.on('osjs/window:create', win => {
     if (!hasOwnIcon(win.state.icon)) {

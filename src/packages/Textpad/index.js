@@ -36,7 +36,7 @@
 //    with match case, whole word, regular expressions ($1 / $<name> in the
 //    replacement), match count and highlighting of every match
 //  - selecting a word highlights its other occurrences (blue) and words with
-//    similar letters (purple); the status bar lists them, click to jump
+//    similar letters (light blue); the status bar lists them, click to jump
 //  - word wrap toggle, line/column display and Ctrl+S to save
 // Zoom level and word wrap are remembered in the visitor's browser.
 //

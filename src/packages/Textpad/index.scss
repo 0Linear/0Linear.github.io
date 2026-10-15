@@ -58,12 +58,12 @@ $line: #d5dae3;
 
 .textpad-hit {
   border-radius: 2px;
-  background: rgba(250, 204, 21, 0.4);
+  background: rgba(96, 165, 250, 0.3);
   color: transparent;
 
   &.is-current {
-    background: rgba(249, 115, 22, 0.5);
-    box-shadow: 0 0 0 1px rgba(234, 88, 12, 0.85);
+    background: rgba(37, 99, 235, 0.45);
+    box-shadow: 0 0 0 1px rgba(29, 78, 216, 0.9);
   }
 
   // Zero-length matches (e.g. ^ or $) show as a thin bar
@@ -73,15 +73,15 @@ $line: #d5dae3;
     height: 1.3em;
     vertical-align: text-bottom;
     background: none;
-    box-shadow: 0 0 0 1px rgba(234, 179, 8, 0.9);
+    box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.9);
   }
 
   &.is-empty.is-current {
-    box-shadow: 0 0 0 1.5px rgba(234, 88, 12, 1);
+    box-shadow: 0 0 0 1.5px rgba(29, 78, 216, 1);
   }
 }
 
-// Selected word: other occurrences (blue) and similar words (purple)
+// Selected word: other occurrences (blue) and similar words (light blue, dotted)
 .textpad-same {
   border-radius: 2px;
   background: rgba(61, 123, 253, 0.2);
@@ -91,8 +91,9 @@ $line: #d5dae3;
 
 .textpad-similar {
   border-radius: 2px;
-  background: rgba(168, 85, 247, 0.13);
-  box-shadow: inset 0 -2px 0 rgba(168, 85, 247, 0.5);
+  background:
+    linear-gradient(90deg, rgba(37, 99, 235, 0.75) 50%, transparent 50%) left bottom / 4px 2px repeat-x,
+    rgba(96, 165, 250, 0.13);
   color: transparent;
 }
 
@@ -294,7 +295,7 @@ $line: #d5dae3;
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  color: #1d2230;
+  color: #111318;
   font-weight: 600;
 }
 
@@ -317,8 +318,9 @@ $line: #d5dae3;
   }
 
   &.is-similar {
-    background: rgba(168, 85, 247, 0.25);
-    box-shadow: inset 0 -2px 0 rgba(168, 85, 247, 0.75);
+    background:
+      linear-gradient(90deg, rgba(37, 99, 235, 0.8) 50%, transparent 50%) left bottom / 3px 2px repeat-x,
+      rgba(96, 165, 250, 0.22);
   }
 }
 
@@ -328,14 +330,14 @@ $line: #d5dae3;
   padding: 0 7px;
   border: 0;
   border-radius: 6px;
-  background: rgba(168, 85, 247, 0.1);
-  color: #6b32b5;
+  background: rgba(59, 130, 246, 0.1);
+  color: #1d4ed8;
   font: inherit;
   font-size: 11.5px;
   cursor: pointer;
 
   &:hover {
-    background: rgba(168, 85, 247, 0.2);
+    background: rgba(59, 130, 246, 0.2);
   }
 }
 
