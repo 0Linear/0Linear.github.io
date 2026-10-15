@@ -41,7 +41,6 @@
 import {
   Core,
   CoreServiceProvider,
-  DesktopServiceProvider,
   VFSServiceProvider,
   NotificationServiceProvider,
   SettingsServiceProvider,
@@ -52,6 +51,7 @@ import {PanelServiceProvider} from '@osjs/panels';
 import {GUIServiceProvider} from '@osjs/gui';
 import {DialogServiceProvider} from '@osjs/dialogs';
 import config from './config.js';
+import {SiteDesktopServiceProvider} from './desktop-links.js';
 import './index.scss';
 
 // Icons for windows that don't bring their own (dialogs and Settings would
@@ -87,7 +87,7 @@ const init = () => {
 
   // Register your service providers
   osjs.register(CoreServiceProvider);
-  osjs.register(DesktopServiceProvider);
+  osjs.register(SiteDesktopServiceProvider);
   osjs.register(VFSServiceProvider);
   osjs.register(NotificationServiceProvider);
   osjs.register(SettingsServiceProvider, {before: true});
