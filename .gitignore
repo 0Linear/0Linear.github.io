@@ -6,4 +6,3 @@ node_modules
 /.env*
 /session-store.db
 /dist
-/dist-desktop

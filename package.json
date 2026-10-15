@@ -21,8 +21,7 @@
     "build:welcome": "node scripts/build-welcome.js",
     "build:packages": "webpack --config src/packages/webpack.config.js && node src/packages/ModernIcons/build.js",
     "build:icons": "node scripts/render-icons.js",
-    "build:slides": "python3 scripts/render-slides.py",
-    "build:pages": "npm run build:packages && osjs-cli package:discover --copy && webpack && node scripts/apply-app-icons.js && node scripts/build-welcome.js && node scripts/build-site.js",
+    "build:pages": "npm run build:packages && osjs-cli package:discover --copy && webpack && node scripts/apply-app-icons.js && node scripts/build-welcome.js",
     "watch": "webpack --watch"
   },
   "keywords": [
