@@ -35,6 +35,8 @@
 //  - find & replace: Ctrl+Shift+F (or Ctrl+F / Ctrl+H, or the Edit menu),
 //    with match case, whole word, regular expressions ($1 / $<name> in the
 //    replacement), match count and highlighting of every match
+//  - selecting a word highlights its other occurrences (blue) and words with
+//    similar letters (light blue); the status bar lists them, click to jump
 //  - word wrap toggle, line/column display and Ctrl+S to save
 // Zoom level and word wrap are remembered in the visitor's browser.
 //
@@ -44,6 +46,7 @@ import {Box, Menubar, MenubarItem, Statusbar} from '@osjs/gui';
 import osjs from 'osjs';
 import {name as applicationName} from './metadata.json';
 import {findMatches, replaceAll, replacementFor, matchIndexAt, escapeRegExp} from './find.js';
+import {tokenize, selectionMatches} from './similar.js';
 import './index.scss';
 
 const BASE_FONT_SIZE = 14;
@@ -93,7 +96,12 @@ const savePrefs = ({zoom, wrap}) => {
 const cursorPosition = textarea => {
   const before = textarea.value.slice(0, textarea.selectionStart);
   const rows = before.split('\n');
-  return {line: rows.length, col: rows[rows.length - 1].length + 1};
+  return {
+    line: rows.length,
+    col: rows[rows.length - 1].length + 1,
+    selStart: textarea.selectionStart,
+    selEnd: textarea.selectionEnd
+  };
 };
 
 // File menu
@@ -137,6 +145,42 @@ const createApplication = (core, proc, win, $content) => {
   let focusTarget = null;    // 'find' | 'replace': input to focus after render
   let revealPending = false; // select + scroll to the current match after render
   let matchCache = {};
+  let tokenCache = {};
+  let selectionCache = {};
+
+  // Same / similar words for the current selection (cached per text + selection)
+  const getSelectionMatches = state => {
+    if (tokenCache.text !== state.text) {
+      tokenCache = {text: state.text, tokens: tokenize(state.text)};
+    }
+    if (selectionCache.text !== state.text || selectionCache.start !== state.selStart || selectionCache.end !== state.selEnd) {
+      selectionCache = {
+        text: state.text,
+        start: state.selStart,
+        end: state.selEnd,
+        result: selectionMatches(state.text, tokenCache.tokens, state.selStart, state.selEnd)
+      };
+    }
+    return selectionCache.result;
+  };
+
+  // Selects the next occurrence of `word` after the selection and shows it
+  const jumpToWord = word => {
+    const ta = getTextarea();
+    const {words} = tokenCache.tokens || tokenize(ta.value);
+    const list = words.filter(w => w.word === word);
+    if (!list.length) {
+      return;
+    }
+    const next = list.find(w => w.start >= ta.selectionEnd) || list[0];
+    ta.focus();
+    ta.setSelectionRange(next.start, next.end);
+    const mark = getBackdrop().querySelector(`mark[data-start="${next.start}"]`);
+    if (mark && (mark.offsetTop < ta.scrollTop || mark.offsetTop + mark.offsetHeight > ta.scrollTop + ta.clientHeight)) {
+      ta.scrollTop = Math.max(0, mark.offsetTop - ta.clientHeight / 3);
+    }
+    ha.setCursor(cursorPosition(ta));
+  };
 
   const getMatches = state => {
     const f = state.find;
@@ -196,18 +240,33 @@ const createApplication = (core, proc, win, $content) => {
     bd.style.height = `${ta.clientHeight}px`;
 
     const {text, find: f} = viewState;
-    const {matches} = f.open ? getMatches(viewState) : {matches: []};
+    const finding = f.open && !!f.query;
+    const {matches} = finding ? getMatches(viewState) : {matches: []};
     const current = matchIndexAt(matches, f.anchor);
-    const signature = [matches, current, text].concat(f.open ? [] : ['closed']);
+    const selection = finding ? null : getSelectionMatches(viewState);
+    const signature = [matches, current, text, selection, finding];
     const same = bd._signature && signature.every((v, i) => v === bd._signature[i]);
 
     if (!same) {
       bd._signature = signature;
+
+      // Find matches win; otherwise highlight words like the selected one
+      const marks = finding
+        ? matches.map((m, i) => ({
+          ...m,
+          cls: 'textpad-hit' + (i === current ? ' is-current' : '') + (m.start === m.end ? ' is-empty' : '')
+        }))
+        : (selection
+          ? selection.same.map(m => ({...m, cls: 'textpad-same'}))
+            .concat(selection.similar.map(m => ({...m, cls: 'textpad-similar'})))
+            .sort((a, b) => a.start - b.start)
+          : []);
+
       let html = '';
       let pos = 0;
-      matches.slice(0, MAX_HIGHLIGHTS).forEach((m, i) => {
-        const cls = 'textpad-hit' + (i === current ? ' is-current' : '') + (m.start === m.end ? ' is-empty' : '');
-        html += escapeHtml(text.slice(pos, m.start)) + `<mark class="${cls}">${escapeHtml(text.slice(m.start, m.end))}</mark>`;
+      marks.slice(0, MAX_HIGHLIGHTS).forEach(m => {
+        html += escapeHtml(text.slice(pos, m.start)) +
+          `<mark class="${m.cls}" data-start="${m.start}">${escapeHtml(text.slice(m.start, m.end))}</mark>`;
         pos = m.end;
       });
       html += escapeHtml(text.slice(pos));
@@ -416,11 +475,40 @@ const createApplication = (core, proc, win, $content) => {
     ]);
   };
 
+  // "word 3× · Similar: words 2×, Word 1×" in the status bar
+  const createSelectionStatus = state => {
+    const sel = state.find.open && state.find.query ? null : getSelectionMatches(state);
+    if (!sel) {
+      return null;
+    }
+
+    const more = sel.similarTotal - sel.similarWords.length;
+    return h('div', {class: 'textpad-words'}, [
+      h('span', {class: 'textpad-words-same', title: 'Occurrences of the selected word'}, [
+        h('i', {class: 'textpad-swatch is-same'}),
+        `${sel.word} ${sel.same.length + 1}\u00d7`
+      ]),
+      sel.similarWords.length ? h('span', {class: 'textpad-words-label'}, [
+        h('i', {class: 'textpad-swatch is-similar'}),
+        'Similar:'
+      ]) : null,
+      ...sel.similarWords.map(w => h('button', {
+        class: 'textpad-word',
+        title: `Go to the next "${w.word}"`,
+        onmousedown: ev => ev.preventDefault(),
+        onclick: () => jumpToWord(w.word)
+      }, `${w.word} ${w.count}\u00d7`)),
+      more > 0 ? h('span', {class: 'textpad-words-label'}, `+${more}`) : null
+    ]);
+  };
+
   // Hyperapp
   const ha = app({
     text: '',
     line: 1,
     col: 1,
+    selStart: 0,
+    selEnd: 0,
     find: {
       open: false,
       query: '',
@@ -579,13 +667,16 @@ const createApplication = (core, proc, win, $content) => {
           },
           onscroll: syncScroll,
           onkeyup: updateCursor,
-          onclick: updateCursor
+          onclick: updateCursor,
+          onmouseup: updateCursor,
+          onselect: updateCursor
         }),
         state.find.open ? createFindBar(state, actions) : null
       ]),
       h(Statusbar, {}, [
         h('span', {class: 'textpad-status'}, `Ln ${state.line}, Col ${state.col}`),
         h('span', {class: 'textpad-status'}, `${state.text.length} characters`),
+        createSelectionStatus(state),
         h('div', {class: 'textpad-zoom'}, [
           h('button', {
             title: 'Zoom out (Ctrl \u2212)',

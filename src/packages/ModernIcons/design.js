@@ -25,7 +25,13 @@ const GLOSS = '<linearGradient id="gl" x1="0" y1="0" x2="0" y2="1">' +
   '<stop offset=".5" stop-color="#fff" stop-opacity="0"/></linearGradient>';
 
 const W = '#ffffff';
-const INK = '#30374a';
+
+// Palette: white, blue and black
+const BLUE = ['#5b9bff', '#1d4ed8'];
+const SKY = ['#8cc8ff', '#2f7cf6'];
+const DEEP = ['#3d6df5', '#1e3a8a'];
+const BLACK = ['#3a3f4b', '#0a0c12'];
+const INK = '#15181f';
 
 /*
  * Building blocks
@@ -130,13 +136,13 @@ const icons = {
     lin('fb', '#3d7ff2', '#2459c9') + lin('ff', '#78b6ff', '#3b82f6') + SHADOW
   ),
 
-  'system-software-install': tile('#8b7bff', '#5b3fd9', glyphs.grid),
+  'system-software-install': tile(...DEEP, glyphs.grid),
 
   'drive-harddisk': svg(
     '<g filter="url(#sh)"><rect x="10" y="28" width="76" height="40" rx="11" fill="url(#hd)"/></g>' +
     '<rect x="10" y="28" width="76" height="20" rx="11" fill="#fff" opacity=".35"/>' +
     '<rect x="20" y="52" width="34" height="5" rx="2.5" fill="#6b7280" opacity=".6"/>' +
-    '<circle cx="72" cy="55" r="4.5" fill="#34d399"/><circle cx="72" cy="55" r="7.5" fill="#34d399" opacity=".25"/>',
+    '<circle cx="72" cy="55" r="4.5" fill="#3b82f6"/><circle cx="72" cy="55" r="7.5" fill="#3b82f6" opacity=".25"/>',
     lin('hd', '#eef1f5', '#a9b1bf') + SHADOW
   ),
 
@@ -151,64 +157,64 @@ const icons = {
   'text-x-script': page(
     lines('#d3d9e4', [22, 31], 30, [20, 14]) +
     badge() + stroke('M37 59l7 7-7 7', W, 4.5) + stroke('M49 73h10', W, 4.5),
-    badgeDefs('#9a7bff', '#6b46e5')
+    badgeDefs(...BLACK)
   ),
 
   'text-html': page(
     lines('#d3d9e4', [22, 31], 30, [20, 14]) +
     badge() + stroke('M42 59l-7 7 7 7M54 59l7 7-7 7', W, 4.5),
-    badgeDefs('#ff9a4d', '#f0622e')
+    badgeDefs(...BLUE)
   ),
 
   'audio-x-generic': page(
     lines('#d3d9e4', [22, 31], 30, [20, 14]) +
     badge() + `<circle cx="44" cy="71" r="4.5" fill="${W}"/><rect x="46.5" y="57" width="3.5" height="15" rx="1.75" fill="${W}"/>` +
     `<path d="M48 57c4 1.5 8.5 3 8.5 8.5-2.5-3-5-3.5-8.5-3.5z" fill="${W}"/>`,
-    badgeDefs('#ff6fa8', '#e2337a')
+    badgeDefs(...DEEP)
   ),
 
   'video-x-generic': page(
     lines('#d3d9e4', [22, 31], 30, [20, 14]) +
     badge() + `<path d="M43 58.5v15a1.5 1.5 0 0 0 2.3 1.3l11.5-7.5a1.5 1.5 0 0 0 0-2.6L45.3 57.2A1.5 1.5 0 0 0 43 58.5z" fill="${W}"/>`,
-    badgeDefs('#ff6b6b', '#e03a3a')
+    badgeDefs(...BLACK)
   ),
 
   'image-x-generic': svg(
     '<g filter="url(#sh)"><rect x="10" y="16" width="76" height="64" rx="10" fill="#fff"/></g>' +
     '<rect x="15" y="21" width="66" height="54" rx="6" fill="url(#sky)"/>' +
-    '<circle cx="64" cy="35" r="6.5" fill="#ffe08a"/>' +
+    '<circle cx="64" cy="35" r="6.5" fill="#ffffff"/>' +
     '<path d="M15 62l17-17 14 14 9-9 26 23v-2 0a6 6 0 0 1-6 6H21a6 6 0 0 1-6-6z" fill="url(#hill)"/>',
-    lin('sky', '#7cc7ff', '#4b8df8') + lin('hill', '#3ccf91', '#14946a') + SHADOW
+    lin('sky', '#8cc8ff', '#3b82f6') + lin('hill', '#1e40af', '#0b1a4a') + SHADOW
   ),
 
   'package-x-generic': svg(
     '<g filter="url(#sh)"><path d="M48 12l34 16v40L48 84 14 68V28z" fill="url(#bx)"/></g>' +
-    '<path d="M14 28l34 16 34-16-34-16z" fill="#f6cf8a"/>' +
-    '<path d="M48 44v40" stroke="#b77b2a" stroke-width="1.5" opacity=".5"/>' +
+    '<path d="M14 28l34 16 34-16-34-16z" fill="#93b8ff"/>' +
+    '<path d="M48 44v40" stroke="#0b1a4a" stroke-width="1.5" opacity=".5"/>' +
     '<path d="M31 20l34 16v10l-8 4V40L23 24z" fill="#fff" opacity=".55"/>',
-    lin('bx', '#e7a85a', '#c98234') + SHADOW
+    lin('bx', '#4f7ff0', '#1e3a8a') + SHADOW
   ),
 
-  'application-x-executable': tile('#94a3b8', '#556274', glyphs.window),
+  'application-x-executable': tile(...BLACK, glyphs.window),
 
   // Application menu categories
-  'applications-graphics': tile('#ff8a5c', '#f0447a',
+  'applications-graphics': tile(...SKY,
     `<circle cx="48" cy="48" r="22" fill="${W}"/>` +
-    '<circle cx="39" cy="40" r="4.5" fill="#f0447a"/><circle cx="51" cy="35" r="4.5" fill="#ffb020"/>' +
-    '<circle cx="60" cy="45" r="4.5" fill="#3b82f6"/><circle cx="38" cy="54" r="4.5" fill="#22c55e"/>' +
+    '<circle cx="39" cy="40" r="4.5" fill="#0a0c12"/><circle cx="51" cy="35" r="4.5" fill="#1d4ed8"/>' +
+    '<circle cx="60" cy="45" r="4.5" fill="#60a5fa"/><circle cx="38" cy="54" r="4.5" fill="#1e3a8a"/>' +
     '<circle cx="55" cy="58" r="5" fill="url(#bg)"/>'),
-  'applications-multimedia': tile('#ff6f91', '#d6336c', glyphs.play),
-  'applications-office': tile('#5aa2ff', '#2f63e0', glyphs.briefcase +
-    '<rect x="22" y="46" width="52" height="4" fill="#2f63e0" opacity=".35"/>'),
-  'applications-utilities': tile('#2dd4bf', '#0f9488', glyphs.sliders),
-  'applications-system': tile('#8792a8', '#4b5568', gear(48, 48, 24, 18, 8, 8, W)),
-  'applications-internet': tile('#4cc3ff', '#2b7de9', glyphs.globe),
-  'applications-development': tile('#7c83ff', '#4a3fd6', glyphs.code),
-  'applications-games': tile('#b26bff', '#7c3aed', glyphs.gamepad +
-    stroke('M32 49h12M38 43v12', '#7c3aed', 4.5) +
-    '<circle cx="59" cy="45" r="3.5" fill="#7c3aed"/><circle cx="65" cy="53" r="3.5" fill="#7c3aed"/>'),
-  'applications-science': tile('#3fd0e8', '#1a8fc4', glyphs.flask),
-  'applications-other': tile('#a3abbb', '#6b7383', glyphs.dots),
+  'applications-multimedia': tile(...BLACK, glyphs.play),
+  'applications-office': tile(...BLUE, glyphs.briefcase +
+    '<rect x="22" y="46" width="52" height="4" fill="#1d4ed8" opacity=".35"/>'),
+  'applications-utilities': tile(...DEEP, glyphs.sliders),
+  'applications-system': tile(...BLACK, gear(48, 48, 24, 18, 8, 8, W)),
+  'applications-internet': tile(...SKY, glyphs.globe),
+  'applications-development': tile(...BLACK, glyphs.code),
+  'applications-games': tile(...DEEP, glyphs.gamepad +
+    stroke('M32 49h12M38 43v12', '#1e3a8a', 4.5) +
+    '<circle cx="59" cy="45" r="3.5" fill="#1e3a8a"/><circle cx="65" cy="53" r="3.5" fill="#1e3a8a"/>'),
+  'applications-science': tile(...SKY, glyphs.flask),
+  'applications-other': tile(...BLACK, glyphs.dots),
 
   // Toolbar & media (dark glyphs)
   'go-previous': svg(stroke('M58 22L32 48l26 26', INK, 10)),
@@ -237,7 +243,7 @@ const icons = {
   lin('bg', '#ff7373', '#dc2f2f') + SHADOW),
   'dialog-question': svg('<g filter="url(#sh)"><circle cx="48" cy="48" r="38" fill="url(#bg)"/></g>' +
     stroke('M37 38a11 11 0 1 1 15.5 10c-3 1.4-4.5 3.4-4.5 6.5v2', W, 8) + `<circle cx="48" cy="68" r="5.5" fill="${W}"/>`,
-  lin('bg', '#a98bff', '#6d4aeb') + SHADOW),
+  lin('bg', ...BLACK) + SHADOW),
 
   'emblem-symbolic-link': svg('<circle cx="48" cy="48" r="40" fill="#fff"/><circle cx="48" cy="48" r="40" fill="none" stroke="#000" stroke-opacity=".12" stroke-width="2"/>' +
     stroke('M32 66c0-16 9-26 30-26M52 28l12 12-12 12', '#1f2937', 9))
@@ -247,22 +253,22 @@ const icons = {
  * Application icons (replace each app's own icon.png in the build)
  */
 const apps = {
-  FileManager: tile('#62a8ff', '#2d6be6', glyphs.folder +
-    '<path d="M26 42h44" stroke="#2d6be6" stroke-width="3" opacity=".35"/>'),
-  Textpad: tile('#ffcf5c', '#f59e0b',
+  FileManager: tile(...BLUE, glyphs.folder +
+    '<path d="M26 42h44" stroke="#1d4ed8" stroke-width="3" opacity=".35"/>'),
+  Textpad: tile(...SKY,
     `<rect x="28" y="20" width="40" height="56" rx="7" fill="${W}"/>` +
-    lines('#f5a524', [32, 41, 50, 59], 35, [26, 20, 26, 14])),
-  Calculator: tile('#535c70', '#262c3a',
-    '<rect x="27" y="22" width="42" height="14" rx="4" fill="#9ce3c4"/>' +
+    lines('#2f7cf6', [32, 41, 50, 59], 35, [26, 20, 26, 14])),
+  Calculator: tile(...BLACK,
+    '<rect x="27" y="22" width="42" height="14" rx="4" fill="#bcd6ff"/>' +
     [0, 1, 2].map(r => [0, 1, 2].map(c => {
-      const color = c === 2 ? '#ff9f43' : W;
+      const color = c === 2 ? '#3b82f6' : W;
       return `<rect x="${27 + c * 15}" y="${42 + r * 11}" width="12" height="8" rx="3" fill="${color}"/>`;
     }).join('')).join('')),
-  Draw: tile('#ff9a5a', '#ef4f7b', glyphs.pencil),
-  HTMLViewer: tile('#4cc3ff', '#2b7de9', glyphs.globe),
-  MusicPlayer: tile('#ff6f91', '#d6336c', glyphs.note),
-  Preview: tile('#34d399', '#0f9f77', glyphs.photo),
-  Settings: tile('#8792a8', '#4b5568', gear(48, 48, 25, 18.5, 8, 8, W))
+  Draw: tile(...DEEP, glyphs.pencil),
+  HTMLViewer: tile(...SKY, glyphs.globe),
+  MusicPlayer: tile(...BLACK, glyphs.note),
+  Preview: tile(...BLUE, glyphs.photo),
+  Settings: tile(...BLACK, gear(48, 48, 25, 18.5, 8, 8, W))
 };
 
 module.exports = {icons, apps};

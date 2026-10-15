@@ -83,7 +83,7 @@ export default {
       },
       background: {
         src: wallpaper,
-        color: '#141b46',
+        color: '#05070d',
         style: 'cover'
       }
     }
